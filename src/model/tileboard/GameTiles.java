@@ -2,8 +2,10 @@ package model.tileboard;
 
 import java.awt.Point;
 import java.io.BufferedReader;
-import java.io.FileReader;
+//import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
@@ -246,6 +248,16 @@ public class GameTiles {
                                 walls[currRow][currCol] = true;
                                 
                             }
+                            else if(cell == 10){
+                                model.battery = new Tile("images/battery");
+                                Point position = tileToXY(currCol,currRow);
+                                model.battery.x = position.x;
+                                model.battery.y = position.y;
+                                model.battery.row = currRow;
+                                model.battery.col = currCol;
+                                model.addChild(model.battery, 2);
+                                
+                            }
                         }
                         
                     }catch(NumberFormatException e){
@@ -383,11 +395,34 @@ public class GameTiles {
     }
     
     private LinkedList<String> parseFile(String path){
+        /*
+         *for files not packaged in jar, path should not have a leading /
         LinkedList<String> result = new LinkedList<String>();
         BufferedReader br = null;
         try {
             String sCurrentLine;
             br = new BufferedReader(new FileReader(path));
+            while ((sCurrentLine = br.readLine()) != null) {
+                result.add(sCurrentLine);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (br != null)br.close();
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        }
+        return result;
+        */
+        //for files packaged into jar, path should have a leading /
+        URL url = this.getClass().getResource(path);
+        LinkedList<String> result = new LinkedList<String>();
+        BufferedReader br = null;
+        try {
+            String sCurrentLine;
+            br = new BufferedReader(new InputStreamReader(url.openStream()));
             while ((sCurrentLine = br.readLine()) != null) {
                 result.add(sCurrentLine);
             }

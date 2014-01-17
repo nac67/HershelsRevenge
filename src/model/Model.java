@@ -29,26 +29,42 @@ import controller.Controller;
 public class Model {
     
     public String[] levelForegrounds = {
-            "levels/tutorial/fg.txt",
-            //"levels/level1fg.txt",
-            "levels/lure/level1fg.txt",
-            "levels/U/level1fg.txt",
-            "levels/foursquare/level1fg.txt",
-            "levels/cornmaze/level1fg.txt",
-            "levels/trapped2/level1fg.txt"
+            "/levels/tutorial/fg.txt",
+            "/levels/easylure/level1fg.txt",
+            "/levels/easybarrel/level1fg.txt",
+            "/levels/lure/level1fg.txt",
+            "/levels/Choice/level1fg.txt",
+            "/levels/U/level1fg.txt",
+            "/levels/triple lure/level1fg.txt",
+            "/levels/flower/level1fg.txt",
+            "/levels/sidestep/level1fg.txt",
+            "/levels/evade/level1fg.txt",
+            "/levels/winery/level1fg.txt",
+            "/levels/foursquare/level1fg.txt",
+            "/levels/chicken coop/level1fg.txt",
+            "/levels/cornmaze/level1fg.txt",
+            "/levels/trapped2/level1fg.txt"
     };
     public String[] levelBackgrounds = {
-            "levels/tutorial/bg.txt",
-            //"levels/level1bg.txt",
-            "levels/lure/level1bg.txt",
-            "levels/U/level1bg.txt",
-            "levels/foursquare/level1bg.txt",
-            "levels/cornmaze/level1bg.txt",
-            "levels/trapped2/level1bg.txt"
+            "/levels/tutorial/bg.txt",
+            "/levels/easylure/level1bg.txt",
+            "/levels/easybarrel/level1bg.txt",
+            "/levels/lure/level1bg.txt",
+            "/levels/Choice/level1bg.txt",
+            "/levels/U/level1bg.txt",
+            "/levels/triple lure/level1bg.txt",
+            "/levels/flower/level1bg.txt",
+            "/levels/sidestep/level1bg.txt",
+            "/levels/evade/level1bg.txt",
+            "/levels/winery/level1bg.txt",
+            "/levels/foursquare/level1bg.txt",
+            "/levels/chicken coop/level1bg.txt",
+            "/levels/cornmaze/level1bg.txt",
+            "/levels/trapped2/level1bg.txt"
     };
     
     public int levelsCompleted = 0;
-    public int totalLevels = 6;
+    public int totalLevels = 15;
     public int currentLevel;
     
     
@@ -79,6 +95,8 @@ public class Model {
     public ArrayList<Tile> enemies;
     public Tile gameOverEnemy;
     
+    public Tile battery;
+    
     public int dieTime;
     
     //list of ducking animations so that they can be deleted if light 
@@ -86,6 +104,11 @@ public class Model {
     public ArrayList<Tile> duckingEnemies; 
     
     public SoundEffect stepSound;
+    public SoundEffect diveSound;
+    public SoundEffect batterySound;
+    public SoundEffect die2Sound;
+    public SoundEffect die1Sound;
+    public SoundEffect music;
     
     public boolean menuReady;
     public ArrayList<MovieClip> menuRemovables;
@@ -103,7 +126,12 @@ public class Model {
         new MovieClip("images/Chupacabra",true);
         
         //load sounds
-        stepSound = new SoundEffect("sounds/brush3.wav");
+        stepSound = new SoundEffect("sounds/brush4.wav");
+        diveSound = new SoundEffect("sounds/dive.wav");
+        batterySound = new SoundEffect("sounds/batteryinsert.wav");
+        die2Sound = new SoundEffect("sounds/underground die.wav");
+        die1Sound = new SoundEffect("sounds/die.wav");
+        music = new SoundEffect("sounds/gamemusic.wav");
         
         menuRemovables = new ArrayList<MovieClip>();
         menuReady = false;
@@ -119,6 +147,7 @@ public class Model {
             }
         }
         
+        music.play(10000);
     }
     
     private void loadLevelEssentials(){
@@ -142,7 +171,7 @@ public class Model {
         lastMouse = new Point();
         
         
-        SoundEffect.muted = true;
+        SoundEffect.muted = false;
         
     }
     
@@ -205,6 +234,15 @@ public class Model {
     
     public void drawLevelSelect() {
         clearMenus();
+        
+        if(levelsCompleted == totalLevels){
+            MovieClip woohoo = new MovieClip("images/ui/endgame.png");
+            addChild(woohoo,3);
+            menuRemovables.add(woohoo);
+            woohoo.x = 0-levelShiftX;
+            woohoo.y = 0-levelShiftY;
+        }
+        
         menuLevelTicks = new ArrayList<MovieClip>();
         for(int i=0;i<totalLevels;i++){
             MovieClip tick = new MovieClip("images/ui/level icons");
@@ -273,6 +311,7 @@ public class Model {
     
     
     public void completeLevel(){
+        batterySound.play();
         MovieClip black = blackness();
         addChild(black,2);
         

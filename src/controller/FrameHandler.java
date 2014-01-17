@@ -108,22 +108,22 @@ public class FrameHandler implements ActionListener{
                 Point newPosition = new Point(model.player.col,model.player.row);
                 boolean keyPressed = false;
                 
-                if (keys.keyJustPressed(65)){
+                if (keys.isDown(65)){
                     newPosition = new Point(newPosition.x-1,newPosition.y);
                     keyPressed = true;
-                }else if (keys.keyJustPressed(68)){
+                }else if (keys.isDown(68)){
                     newPosition = new Point(newPosition.x+1,newPosition.y);
                     keyPressed = true;
-                }else if (keys.keyJustPressed(83)){
+                }else if (keys.isDown(83)){
                     newPosition = new Point(newPosition.x,newPosition.y+1);
                     keyPressed = true;
-                }else if (keys.keyJustPressed(87)){
+                }else if (keys.isDown(87)){
                     newPosition = new Point(newPosition.x,newPosition.y-1);
                     keyPressed = true;
                 }
                 
                 
-                if(keys.keyJustPressed(66)) model.completeLevel();
+                //if(keys.keyJustPressed(66)) model.completeLevel();
                 
                 boolean validMove = model.gameboard.inBounds(newPosition.y, newPosition.x) &&
                         !model.gameboard.walls[newPosition.y][newPosition.x];
@@ -165,6 +165,7 @@ public class FrameHandler implements ActionListener{
                 model.moveTimer ++;
             }else{
                 boolean enemyTouchPlayer = Utils.isInTileList(model.player, model.enemies);
+                boolean touchBattery = model.player.row == model.battery.row && model.player.col == model.battery.col;
                 if(enemyTouchPlayer){
                     model.moveTimer = 0;
                     model.gameOverEnemy = enemyAt(model.player.col,model.player.row);
@@ -177,11 +178,13 @@ public class FrameHandler implements ActionListener{
                         model.player.setOrigin(60, 80);
                         model.player.stopAtEnd();
                         model.dieTime = Constants.DIE_TIME2;
+                        model.die2Sound.play();
                     }else{
                         model.player.swapAndRestart("HershelDieAbove");
                         model.player.setOrigin(40, 66);
                         model.player.stopAtEnd();
                         model.dieTime = Constants.DIE_TIME;
+                        model.die1Sound.play();
                     }
                     model.flashlight = new Area();
                     model.gameState = State.GAME_OVER;
@@ -198,7 +201,10 @@ public class FrameHandler implements ActionListener{
                         playerIdleAnimation();
                         model.gameState = State.WAIT_FOR_PLAYER;
                     }*/
-                }else{                
+                }else if(touchBattery){
+                    model.removeChild(model.battery);
+                    model.completeLevel();                
+                }else{
                     //set to real position so that inaccuracies with
                     //movement don't pile up
                     model.gameboard.realPosition(model.player);
@@ -615,6 +621,7 @@ public class FrameHandler implements ActionListener{
             model.gameboard.realPosition(duck);
             model.addChild(duck, 2);
             model.duckingEnemies.add(duck);
+            model.diveSound.play();
         }else if(i==1){
             Tile dirt = new Tile("images/Particles/ChupaRise");
             dirt.row = enemy.row;
