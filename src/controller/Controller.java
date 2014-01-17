@@ -2,6 +2,8 @@ package controller;
 
 import model.Constants;
 import model.Model;
+import model.utils.JarCalc;
+import model.utils.Utils;
 import view.View;
 
 /**
@@ -40,6 +42,8 @@ public class Controller {
 
     /** Constructor */
     public Controller() {
+        Utils.cd = JarCalc.getJarDir(this.getClass());
+        System.out.println(Utils.cd);
         //initialize model, view, key and mouse
         model = new Model(this);
         gameKeys = new KeyHandler(this);

@@ -5,6 +5,8 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.Hashtable;
 
+import model.utils.Utils;
+
 /**
  * The Animation Swapper makes it easy to have an object represented
  * by a number of animations. Then you can swap between the animations.
@@ -58,7 +60,8 @@ public class AnimationSwapper implements IteratingAnimation {
         //take top level directory and load in lots of animations from folder
         animationSet = new Hashtable<String, Animation>();
 
-        File folder = new File(dirpath);
+        //TODO here
+        File folder = new File(Utils.currentDir()+dirpath);
         
         boolean didFirst = false;
         

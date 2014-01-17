@@ -77,5 +77,11 @@ public class Utils {
             }
         }
     }
+    
+    public static String cd = null;
+    public static String currentDir() {
+        return cd;
+        
+    }
 
 }

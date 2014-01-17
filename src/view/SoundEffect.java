@@ -9,6 +9,7 @@ import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
 import model.Constants;
+import model.utils.Utils;
 
 
 public class SoundEffect {
@@ -18,6 +19,7 @@ public class SoundEffect {
 
     public SoundEffect(String path) {
         try {
+            path = Utils.currentDir()+path;
             if(Constants.DEBUG) System.out.println("Reading sound: "+path);
             // Use URL (instead of File) to read from disk and JAR.
             //URL url = this.getClass().getClassLoader().getResource("sounds/test.wav");

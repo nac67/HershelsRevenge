@@ -11,6 +11,7 @@ import java.util.Hashtable;
 import javax.imageio.ImageIO;
 
 import model.Constants;
+import model.utils.Utils;
 
 /**
  * The Animation class is very helpful for iterating through
@@ -92,7 +93,8 @@ public class Animation implements IteratingAnimation {
      * contains the animation pictures
      */
     public Animation(String path) {
-        this(new File(path));
+        
+        this(new File(Utils.currentDir()+path));
     }
     
     /**
